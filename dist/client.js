@@ -10,11 +10,7 @@
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-exports.saveLike = saveLike;
-exports.removeLike = removeLike;
-exports.updateLike = updateLike;
-exports.findMobilSoegProfile = findMobilSoegProfile;
-exports.init = init;
+exports['default'] = MobilSoegProfileClient;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -22,16 +18,13 @@ var _request = require('request');
 
 var _request2 = _interopRequireDefault(_request);
 
-var endpoint = null;
-
 /**
  * Save a like on a users profile
  *
  * @param {object }params
  * @return {Promise}
  */
-
-function saveLike(params) {
+function saveLike(endpoint, params) {
   var mobilSoegProfileId = params.mobilSoegProfileId;
   var item_id = params.item_id;
   var value = params.value;
@@ -56,8 +49,7 @@ function saveLike(params) {
  * @param {object} params
  * @return {Promise}
  */
-
-function removeLike(params) {
+function removeLike(endpoint, params) {
   var mobilSoegProfileId = params.mobilSoegProfileId;
   var id = params.id;
 
@@ -78,8 +70,7 @@ function removeLike(params) {
  * @param {object} params
  * @return {Promise}
  */
-
-function updateLike(params) {
+function updateLike(endpoint, params) {
   var mobilSoegProfileId = params.mobilSoegProfileId;
   var id = params.id;
   var value = params.value;
@@ -103,8 +94,7 @@ function updateLike(params) {
  *
  * @see http://profile-i01.dbc.dk:3001/explorer/#!/MobilSoegProfiles/findMobilSoegProfile
  */
-
-function findMobilSoegProfile(params) {
+function findMobilSoegProfile(endpoint, params) {
   var loanerid = params.loanerid;
   var agencyid = params.agencyid;
 
@@ -136,19 +126,20 @@ function findMobilSoegProfile(params) {
  * the webservice
  */
 
-function init() {
+function MobilSoegProfileClient() {
   var config = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
 
   if (!config || !config.endpoint) {
     throw new Error('Expected config object but got null or no endpoint provided');
   }
-  endpoint = config.endpoint;
+  var endpoint = config.endpoint;
+
+  return {
+    findMobilSoegProfile: findMobilSoegProfile.bind(null, endpoint),
+    removeLike: removeLike.bind(null, endpoint),
+    saveLike: saveLike.bind(null, endpoint),
+    updateLike: updateLike.bind(null, endpoint)
+  };
 }
 
-var METHODS = {
-  findMobilSoegProfile: findMobilSoegProfile,
-  removeLike: removeLike,
-  saveLike: saveLike,
-  updateLike: updateLike
-};
-exports.METHODS = METHODS;
+module.exports = exports['default'];

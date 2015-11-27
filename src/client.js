@@ -9,15 +9,13 @@
 
 import request from 'request';
 
-let endpoint = null;
-
 /**
  * Save a like on a users profile
  *
  * @param {object }params
  * @return {Promise}
  */
-export function saveLike(params) {
+function saveLike(endpoint, params) {
   const mobilSoegProfileId = params.mobilSoegProfileId;
   const item_id = params.item_id;
   const value = params.value;
@@ -45,7 +43,7 @@ export function saveLike(params) {
  * @param {object} params
  * @return {Promise}
  */
-export function removeLike(params) {
+function removeLike(endpoint, params) {
   const mobilSoegProfileId = params.mobilSoegProfileId;
   const id = params.id;
 
@@ -69,7 +67,7 @@ export function removeLike(params) {
  * @param {object} params
  * @return {Promise}
  */
-export function updateLike(params) {
+function updateLike(endpoint, params) {
   const mobilSoegProfileId = params.mobilSoegProfileId;
   const id = params.id;
   const value = params.value;
@@ -96,7 +94,7 @@ export function updateLike(params) {
  *
  * @see http://profile-i01.dbc.dk:3001/explorer/#!/MobilSoegProfiles/findMobilSoegProfile
  */
-export function findMobilSoegProfile(params) {
+function findMobilSoegProfile(endpoint, params) {
   const {loanerid, agencyid} = params;
   const url = `${endpoint}api/MobilSoegProfiles/findMobilSoegProfile`;
 
@@ -129,16 +127,16 @@ export function findMobilSoegProfile(params) {
  * @param {Object} config Config object with the necessary parameters to use
  * the webservice
  */
-export function init(config = null) {
+export default function MobilSoegProfileClient(config = null) {
   if (!config || !config.endpoint) {
     throw new Error('Expected config object but got null or no endpoint provided');
   }
-  endpoint = config.endpoint;
-}
+  const endpoint = config.endpoint;
 
-export const METHODS = {
-  findMobilSoegProfile: findMobilSoegProfile,
-  removeLike: removeLike,
-  saveLike: saveLike,
-  updateLike: updateLike
-};
+  return {
+    findMobilSoegProfile: findMobilSoegProfile.bind(null, endpoint),
+    removeLike: removeLike.bind(null, endpoint),
+    saveLike: saveLike.bind(null, endpoint),
+    updateLike: updateLike.bind(null, endpoint)
+  };
+}
