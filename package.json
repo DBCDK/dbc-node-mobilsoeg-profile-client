@@ -1,6 +1,6 @@
 {
   "name": "dbc-node-mobilsoeg-profile-client",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Client for the DBC profile service. Focussed on the MobilSøg user profile.",
   "main": "index.js",
   "scripts": {
