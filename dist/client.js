@@ -21,7 +21,9 @@ var _request2 = _interopRequireDefault(_request);
 /**
  * Save a like on a users profile
  *
+ * @param {String} endpoint
  * @param {object }params
+ *
  * @return {Promise}
  */
 function saveLike(endpoint, params) {
@@ -46,7 +48,9 @@ function saveLike(endpoint, params) {
 /**
  * Remove a like on a users profile
  *
+ * @param {String} endpoint
  * @param {object} params
+ *
  * @return {Promise}
  */
 function removeLike(endpoint, params) {
@@ -65,9 +69,33 @@ function removeLike(endpoint, params) {
 }
 
 /**
+ * Remove all likes/dislikes on a users profile
+ *
+ * @param {String} endpoint
+ * @param {{mobilSoegProfileId: String}} params
+ *
+ * @return {Promise}
+ */
+function removeAllLikes(endpoint, params) {
+  var mobilSoegProfileId = params.mobilSoegProfileId;
+
+  return new Promise(function (resolve) {
+    var url = endpoint + 'api/MobilSoegProfiles/' + mobilSoegProfileId + '/likes';
+    _request2['default'].del({
+      url: url,
+      form: {}
+    }, function (err, httpResponse) {
+      resolve(httpResponse);
+    });
+  });
+}
+
+/**
  * Update a like on a users profile
  *
+ * @param {String} endpoint
  * @param {object} params
+ *
  * @return {Promise}
  */
 function updateLike(endpoint, params) {
@@ -89,9 +117,12 @@ function updateLike(endpoint, params) {
 }
 
 /**
+ *
  * Requests a specific user profile from the profile service.
+ * @param {String} endpoint
  * @param {{agencyid: string, loanerid: string}} params
  *
+ * @return {Promise}
  * @see http://profile-i01.dbc.dk:3001/explorer/#!/MobilSoegProfiles/findMobilSoegProfile
  */
 function findMobilSoegProfile(endpoint, params) {
@@ -137,6 +168,7 @@ function MobilSoegProfileClient() {
   return {
     findMobilSoegProfile: findMobilSoegProfile.bind(null, endpoint),
     removeLike: removeLike.bind(null, endpoint),
+    removeAllLikes: removeAllLikes.bind(null, endpoint),
     saveLike: saveLike.bind(null, endpoint),
     updateLike: updateLike.bind(null, endpoint)
   };
