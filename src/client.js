@@ -120,6 +120,38 @@ function updateLike(endpoint, params) {
 }
 
 /**
+ * Update pickup agency on a users profile
+ *
+ * @param {String} endpoint
+ * @param {object} params
+ *
+ * @return {Promise}
+ */
+function updatePickupAgency(endpoint, params) {
+  const mobilSoegProfileId = params.mobilSoegProfileId;
+  const pickupAgency = params.pickupAgency;
+
+  return new Promise((resolve, reject) => {
+    const url = endpoint + 'api/MobilSoegProfiles/' + mobilSoegProfileId;
+    request.put(
+      {
+        url: url,
+        form: {
+          pickup_agency: pickupAgency
+        }
+      },
+      (err, httpResponse) => {
+        if (err) {
+          reject(err);
+        }
+
+        resolve(httpResponse);
+      }
+    );
+  });
+}
+
+/**
  *
  * Requests a specific user profile from the profile service.
  * @param {String} endpoint
@@ -172,6 +204,7 @@ export default function MobilSoegProfileClient(config = null) {
     removeLike: removeLike.bind(null, endpoint),
     removeAllLikes: removeAllLikes.bind(null, endpoint),
     saveLike: saveLike.bind(null, endpoint),
-    updateLike: updateLike.bind(null, endpoint)
+    updateLike: updateLike.bind(null, endpoint),
+    updatePickupAgency: updatePickupAgency.bind(null, endpoint)
   };
 }
